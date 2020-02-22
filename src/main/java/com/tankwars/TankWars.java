@@ -17,12 +17,23 @@ public class TankWars extends Application {
     @Override
     public void start(Stage primaryStage) {
         BoardCreator board = new BoardCreator();
-        GridPane gridPane = board.BoardCreate(50, 20, 20);
-        Scene scene = new Scene(gridPane,Color.LIGHTGRAY);
+        GridPane gridPane = board.BoardCreate(49, 20, 20);
+        Scene scene = new Scene(gridPane, Color.LIGHTGRAY);
         Game game = new Game();
         Integration integration = new Integration(game, gridPane);
         integration.displayGame();
-        
+//        dokonczyc
+        gridPane.setOnKeyPressed(event -> {
+            System.out.println(event.getCode());
+            integration.handleClick(event.getCode());
+        });
+        gridPane.setOnKeyTyped(event -> {
+            System.out.println(event.getCode());
+        });
+        gridPane.setOnMouseClicked(event -> {
+            System.out.println(event.getX());
+        });
+
         primaryStage.setTitle("TankWars");
         primaryStage.setScene(scene);
         primaryStage.show();

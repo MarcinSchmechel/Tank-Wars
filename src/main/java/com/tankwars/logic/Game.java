@@ -7,7 +7,7 @@ public class Game {
     private List<GameRow> rows = new ArrayList<>();
 
     public Game() {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 49; i++) {
             rows.add(new GameRow());
         }
         initBoard();
@@ -33,51 +33,67 @@ public class Game {
         for (int i = 0; i < 100; i++) {
             placeWallElementInRandomEmptyPosition();
         }
-
     }
-    public void placeWallVertical(){
-        int x = getRandomNumberInRange();
-        int y = getRandomNumberInRange();
-
-        while(getElement(x,y).getClass() != NoneElement.class){
-            x = randomNumberInRange(1, 48);
-            y = randomNumberInRange(1, 48);
+    private void createBoardFrame() {
+        for (int x = 0; x < 49; x++)
+        {
+            setElement(x,0,new WallElement());
+            setElement(x,48,new WallElement());
         }
-        setElement(x,y,new WallElement());
-
-        for (int i = 1; i < 10; i++) {
-            for (int j = 1; j < randomNumber(9); j++) {
-                if (y + j < 49) {
-                    if (getElement(x,y+j).getClass() == NoneElement.class) {
-                        setElement(x, y+j, new WallElement());
-                    } else {
-                        continue;
-                    }
-                }
-            }
+        for (int y = 0; y < 49; y++)
+        {
+            setElement(0,y,new WallElement());
+            setElement(48,y,new WallElement());
         }
+    }
+    private void placeTanks() {
+        setElement(25,47,new UserTankElement());
+        setElement(25,1,new BootElement());
+        setElement(1,25,new BootElement());
+        setElement(47,25,new BootElement());
     }
     public void placeWallHorizontal(){
         int x = getRandomNumberInRange();
         int y = getRandomNumberInRange();
 
         while(getElement(x,y).getClass() != NoneElement.class){
-            x = randomNumberInRange(1, 48);
-            y = randomNumberInRange(1, 48);
+            x = randomNumberInRange(1, 47);
+            y = randomNumberInRange(1, 47);
         }
         setElement(x,y,new WallElement());
 
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < randomNumber(9); j++) {
-                if (x + j < 49) {
+                if (x + j < 48) {
                     if (getElement(x + j, y).getClass() == NoneElement.class) {
                         setElement(x + j, y, new WallElement());
-                    } else {
-                        continue;
                     }
                 }
             }
         }
+    }
+    public void placeWallVertical(){
+        int x = getRandomNumberInRange();
+        int y = getRandomNumberInRange();
+
+        while(getElement(x,y).getClass() != NoneElement.class){
+            x = randomNumberInRange(1, 47);
+            y = randomNumberInRange(1, 47);
+        }
+        setElement(x,y,new WallElement());
+
+        for (int i = 1; i < 10; i++) {
+            for (int j = 1; j < randomNumber(9); j++) {
+                if (y + j < 48) {
+                    if (getElement(x,y+j).getClass() == NoneElement.class) {
+                        setElement(x, y+j, new WallElement());
+                    }
+                }
+            }
+        }
+    }
+    public static int randomNumber(int i) {
+        return (int)(Math.random()*(i+1));
     }
     public void placeWallElementInRandomEmptyPosition(){
         int x = getRandomNumberInRange();
@@ -90,10 +106,7 @@ public class Game {
         setElement(x,y,new WallElement());
     }
     public int getRandomNumberInRange(){
-        return randomNumberInRange(1,  48);
-    }
-    public static int randomNumber(int i) {
-        return (int)(Math.random()*(i+1));
+        return randomNumberInRange(1,  47);
     }
     public static int randomNumberInRange(int x, int y) {
         int min = x;
@@ -103,24 +116,5 @@ public class Game {
             max = x;
         }
         return (int)(Math.random() * (max - min + 1) + min);
-    }
-    private void placeTanks() {
-        setElement(25,48,new UserTankElement());
-        setElement(25,1,new BootElement());
-        setElement(1,25,new BootElement());
-        setElement(48,25,new BootElement());
-    }
-
-    private void createBoardFrame() {
-        for (int x = 0; x < 50; x++)
-        {
-            setElement(x,0,new WallElement());
-            setElement(x,49,new WallElement());
-        }
-        for (int y = 0; y < 50; y++)
-        {
-            setElement(0,y,new WallElement());
-            setElement(49,y,new WallElement());
-        }
     }
 }

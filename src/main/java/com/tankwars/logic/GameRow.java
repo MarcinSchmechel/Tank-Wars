@@ -7,7 +7,7 @@ public class GameRow {
     private List<GameElement> cols = new ArrayList<>();
 
     public GameRow() {
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 49; i++) {
             cols.add(new NoneElement());
         }
     }
