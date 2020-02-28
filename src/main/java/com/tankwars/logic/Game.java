@@ -1,5 +1,7 @@
 package com.tankwars.logic;
 
+import javafx.scene.input.KeyCode;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,7 +9,7 @@ public class Game {
     private List<GameRow> rows = new ArrayList<>();
 
     public Game() {
-        for (int i = 0; i < 49; i++) {
+        for (int i = 0; i < 29; i++) {
             rows.add(new GameRow());
         }
         initBoard();
@@ -18,6 +20,27 @@ public class Game {
 
     public void setElement(int x, int y, GameElement gameElement){
         rows.get(y).getCols().set(x,gameElement);
+    }
+    public void findElementAndChangeItsDirection(KeyCode code){
+        for (int x = 1; x < 29; x++) {
+            for (int y = 1; y < 29; y++) {
+                GameElement element = getElement(x, y);
+                if (element instanceof UserTankElement) {
+                    ((UserTankElement)element).setDirection(code);
+                }
+            }
+        }
+    }
+
+    public void findBootAndChangeItsDirection(){
+        for (int x = 1; x < 29; x++) {
+            for (int y = 1; y < 29; y++) {
+                GameElement element = getElement(x, y);
+                if (element instanceof BootElement) {
+                    ((BootElement)element).setRandomDirection();
+                }
+            }
+        }
     }
 
     public void initBoard(){
@@ -30,84 +53,92 @@ public class Game {
         for (int i = 0; i < 15; i++) {
             placeWallVertical();
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 50; i++) {
             placeWallElementInRandomEmptyPosition();
         }
     }
+
     private void createBoardFrame() {
-        for (int x = 0; x < 49; x++)
+        for (int x = 0; x < 29; x++)
         {
             setElement(x,0,new WallElement());
-            setElement(x,48,new WallElement());
+            setElement(x,28,new WallElement());
         }
-        for (int y = 0; y < 49; y++)
+        for (int y = 0; y < 29; y++)
         {
             setElement(0,y,new WallElement());
-            setElement(48,y,new WallElement());
+            setElement(28,y,new WallElement());
         }
     }
+
     private void placeTanks() {
-        setElement(25,47,new UserTankElement());
-        setElement(25,1,new BootElement());
-        setElement(1,25,new BootElement());
-        setElement(47,25,new BootElement());
+        setElement(12,27,new UserTankElement());
+        setElement(12,1,new BootElement());
+        setElement(1,12,new BootElement());
+        setElement(27,12,new BootElement());
     }
+
     public void placeWallHorizontal(){
         int x = getRandomNumberInRange();
         int y = getRandomNumberInRange();
 
-        while(getElement(x,y).getClass() != NoneElement.class){
-            x = randomNumberInRange(1, 47);
-            y = randomNumberInRange(1, 47);
+        while(!(getElement(x,y) instanceof NoneElement)){
+            x = randomNumberInRange(2, 26);
+            y = randomNumberInRange(2, 26);
         }
         setElement(x,y,new WallElement());
 
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < randomNumber(9); j++) {
-                if (x + j < 48) {
-                    if (getElement(x + j, y).getClass() == NoneElement.class) {
+                if (x + j < 27) {
+                    if (getElement(x + j, y) instanceof NoneElement) {
                         setElement(x + j, y, new WallElement());
                     }
                 }
             }
         }
     }
+
     public void placeWallVertical(){
         int x = getRandomNumberInRange();
         int y = getRandomNumberInRange();
 
-        while(getElement(x,y).getClass() != NoneElement.class){
-            x = randomNumberInRange(1, 47);
-            y = randomNumberInRange(1, 47);
+        while(!(getElement(x,y) instanceof NoneElement)){
+            x = randomNumberInRange(2, 26);
+            y = randomNumberInRange(2, 26);
         }
         setElement(x,y,new WallElement());
 
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < randomNumber(9); j++) {
-                if (y + j < 48) {
-                    if (getElement(x,y+j).getClass() == NoneElement.class) {
+                if (y + j < 27) {
+                    if (getElement(x,y+j) instanceof NoneElement) {
                         setElement(x, y+j, new WallElement());
                     }
                 }
             }
         }
     }
+
     public static int randomNumber(int i) {
         return (int)(Math.random()*(i+1));
     }
+
     public void placeWallElementInRandomEmptyPosition(){
         int x = getRandomNumberInRange();
         int y = getRandomNumberInRange();
 
-        while(getElement(x,y).getClass() != NoneElement.class){
+        while(!(getElement(x,y) instanceof NoneElement)){
             x = getRandomNumberInRange();
             y = getRandomNumberInRange();
         }
         setElement(x,y,new WallElement());
     }
+
     public int getRandomNumberInRange(){
-        return randomNumberInRange(1,  47);
+        return randomNumberInRange(2,  26);
     }
+
     public static int randomNumberInRange(int x, int y) {
         int min = x;
         int max = y;

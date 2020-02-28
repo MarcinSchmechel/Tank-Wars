@@ -1,12 +1,9 @@
 package com.tankwars.integration;
 
-import com.tankwars.logic.Game;
-import com.tankwars.logic.GameElement;
+import com.tankwars.logic.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
-
-import static javafx.scene.input.KeyCode.*;
 
 
 public class Integration {
@@ -25,10 +22,11 @@ public class Integration {
     public GridPane getGridPane() {
         return gridPane;
     }
+
     public void displayGame(){
         gridPane.getChildren().clear();
-        for (int x = 0; x < 49; x++) {
-            for (int y = 0; y < 49; y++) {
+        for (int x = 0; x < 29; x++) {
+            for (int y = 0; y < 29; y++) {
                 ImageView imageView = game.getElement(x,y).getImage();
                 gridPane.add(imageView,x,y);
             }
@@ -36,30 +34,53 @@ public class Integration {
     }
 
     public void handleClick(KeyCode code) {
-        switch (code){
-            case DOWN:
-//                odnależć na planszy czołg i ustaswić mu keriunek SOUTH
-                break;
-            case UP:
-//               odnależć na planszy czołg i ustaswić mu keriunek NORTH
-                break;
-//                east i west
-
-        }
+        game.findElementAndChangeItsDirection(code);
+//        moveTanks();
+//        displayGame();
     }
+
     public void doMove(){
-//        tą metodę wykonywać timerem co 0,5 sek.
-        setRandomEnemyDirection();
+        game.findBootAndChangeItsDirection();
         moveTanks();
         displayGame();
     }
 
     private void moveTanks() {
-//        zmienić położenie czołgu zgodnie z kierunkiem ruchu jeżeli jest to możliwe
-//        to samo zrobić z czołgiem komputera
+        for (int x = 1; x < 28; x++) {
+            for (int y = 1; y < 28; y++) {
+                GameElement element = game.getElement(x,y);
+                if (element instanceof BootElement ||element instanceof UserTankElement) {
+                    int xDirection = 0;
+                    int yDirection = 0;
+                    switch (element.getDirection()) {
+                        case EAST:
+                            xDirection = (-1);
+                            checkAndMoveElementOneStep(x, y, element, xDirection, yDirection);
+                            break;
+                        case WEST:
+                            xDirection = (1);
+                            checkAndMoveElementOneStep(x, y, element, xDirection, yDirection);
+                            x++;
+                            break;
+                        case NORTH:
+                            yDirection = (-1);
+                            checkAndMoveElementOneStep(x, y, element, xDirection, yDirection);
+                            break;
+                        case SOUTH:
+                            yDirection = (1);
+                            checkAndMoveElementOneStep(x, y, element, xDirection, yDirection);
+                            y++;
+                            break;
+                    }
+                }
+            }
+        }
     }
 
-    private void setRandomEnemyDirection() {
-//        wylosować i ustawić czołgowi sterowanemu przez komputer kierunek
+    private void checkAndMoveElementOneStep(int x, int y, GameElement element, int xDirection, int yDirection) {
+        if(game.getElement((x + xDirection),(y + yDirection)) instanceof NoneElement){
+            game.setElement((x + xDirection), (y + yDirection), element);
+            game.setElement(x, y, new NoneElement());
+        }
     }
 }
