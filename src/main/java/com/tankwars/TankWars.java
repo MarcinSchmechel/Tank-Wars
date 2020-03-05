@@ -27,9 +27,17 @@ public class TankWars extends Application {
         Integration integration = new Integration(game, gridPane);
         integration.displayGame();
 
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(250),k ->integration.doMove()));
+        Timeline timeline3 = new Timeline(new KeyFrame(Duration.millis(1500),k ->integration.doFireBoot()));
+        timeline3.setCycleCount(Animation.INDEFINITE);
+        timeline3.play();
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(400),k ->integration.doMove()));
         timeline.setCycleCount(Animation.INDEFINITE);
         timeline.play();
+
+        Timeline timeline2 = new Timeline(new KeyFrame(Duration.millis(200),k ->integration.moveBullet()));
+        timeline2.setCycleCount(Animation.INDEFINITE);
+        timeline2.play();
 
         scene.setOnKeyPressed(event -> {
             integration.handleClick(event.getCode());

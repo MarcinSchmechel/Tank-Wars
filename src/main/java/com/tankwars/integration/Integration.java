@@ -34,9 +34,11 @@ public class Integration {
     }
 
     public void handleClick(KeyCode code) {
-        game.findElementAndChangeItsDirection(code);
-//        moveTanks();
-//        displayGame();
+        if(code == KeyCode.SPACE){
+            game.fireBullet();
+        } else {
+            game.findElementAndChangeItsDirection(code);
+        }
     }
 
     public void doMove(){
@@ -44,7 +46,42 @@ public class Integration {
         moveTanks();
         displayGame();
     }
+    public void doFireBoot(){
+        game.fireBulletBoot();
+    }
 
+
+    public void moveBullet() {
+        for (int x = 1; x < 28; x++) {
+            for (int y = 1; y < 28; y++) {
+                GameElement element = game.getElement(x,y);
+                if (element instanceof BulletElement) {
+                    int xDirection = 0;
+                    int yDirection = 0;
+                    switch (element.getDirection()) {
+                        case EAST:
+                            xDirection = (-1);
+                            checkAndMoveElementOneStep(x, y, element, xDirection, yDirection);
+                            break;
+                        case WEST:
+                            xDirection = (1);
+                            checkAndMoveElementOneStep(x, y, element, xDirection, yDirection);
+                            x++;
+                            break;
+                        case NORTH:
+                            yDirection = (-1);
+                            checkAndMoveElementOneStep(x, y, element, xDirection, yDirection);
+                            break;
+                        case SOUTH:
+                            yDirection = (1);
+                            checkAndMoveElementOneStep(x, y, element, xDirection, yDirection);
+                            y++;
+                            break;
+                    }
+                }
+            }
+        }
+    }
     private void moveTanks() {
         for (int x = 1; x < 28; x++) {
             for (int y = 1; y < 28; y++) {
@@ -80,6 +117,11 @@ public class Integration {
     private void checkAndMoveElementOneStep(int x, int y, GameElement element, int xDirection, int yDirection) {
         if(game.getElement((x + xDirection),(y + yDirection)) instanceof NoneElement){
             game.setElement((x + xDirection), (y + yDirection), element);
+            game.setElement(x, y, new NoneElement());
+        } else if(element instanceof BulletElement) {
+            if (game.getElement((x + xDirection), (y + yDirection)) instanceof BootElement || game.getElement((x + xDirection), (y + yDirection)) instanceof UserTankElement) {
+                game.setElement((x + xDirection), (y + yDirection), new NoneElement());
+            }
             game.setElement(x, y, new NoneElement());
         }
     }

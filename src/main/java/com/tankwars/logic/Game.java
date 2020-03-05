@@ -31,6 +31,65 @@ public class Game {
             }
         }
     }
+        public void fireBullet(){
+            for (int x = 1; x < 29; x++) {
+                for (int y = 1; y < 29; y++) {
+                    GameElement element = getElement(x, y);
+                    if (element instanceof UserTankElement) {
+                        int xDirection = 0;
+                        int yDirection = 0;
+                        switch (element.getDirection()) {
+                            case EAST:
+                                xDirection = (-1);
+                                break;
+                            case WEST:
+                                xDirection = (1);
+                                break;
+                            case NORTH:
+                                yDirection = (-1);
+                                break;
+                            case SOUTH:
+                                yDirection = (1);
+                                break;
+                        }
+                        checkAndPlaceBullet(x, y, element.getDirection(), xDirection, yDirection);
+                    }
+                }
+            }
+        }
+    public void fireBulletBoot(){
+        for (int x = 1; x < 29; x++) {
+            for (int y = 1; y < 29; y++) {
+                GameElement element = getElement(x, y);
+                if (element instanceof BootElement) {
+                    int xDirection = 0;
+                    int yDirection = 0;
+                    switch (element.getDirection()) {
+                        case EAST:
+                            xDirection = (-1);
+                            break;
+                        case WEST:
+                            xDirection = (1);
+                            break;
+                        case NORTH:
+                            yDirection = (-1);
+                            break;
+                        case SOUTH:
+                            yDirection = (1);
+                            break;
+                    }
+                    checkAndPlaceBullet(x, y, element.getDirection(), xDirection, yDirection);
+                }
+            }
+        }
+    }
+    private void checkAndPlaceBullet(int x, int y, TankDirection tankDirection, int xDirection, int yDirection) {
+        if(getElement((x + xDirection),(y + yDirection)) instanceof NoneElement){
+            setElement((x + xDirection), (y + yDirection), new BulletElement(tankDirection));
+        } else if (getElement((x + xDirection),(y + yDirection)) instanceof BootElement || getElement((x + xDirection),(y + yDirection)) instanceof UserTankElement){
+            setElement((x + xDirection), (y + yDirection), new NoneElement());
+        }
+    }
 
     public void findBootAndChangeItsDirection(){
         for (int x = 1; x < 29; x++) {

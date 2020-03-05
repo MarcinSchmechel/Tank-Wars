@@ -1,7 +1,6 @@
 package com.tankwars.logic;
 
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 
 public class BootElement implements GameElement {
     private TankDirection bootDirection;
